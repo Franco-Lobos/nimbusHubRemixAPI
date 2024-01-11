@@ -4,9 +4,9 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: !0 });
 };
 
-// node_modules/@remix-run/dev/dist/config/defaults/entry.server.node.tsx
-var entry_server_node_exports = {};
-__export(entry_server_node_exports, {
+// app/entry.server.tsx
+var entry_server_exports = {};
+__export(entry_server_exports, {
   default: () => handleRequest
 });
 import { PassThrough } from "node:stream";
@@ -14,7 +14,7 @@ import { createReadableStreamFromReadable } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
 import isbot from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
-import { jsx } from "react/jsx-runtime";
+import { jsxDEV } from "react/jsx-dev-runtime";
 var ABORT_DELAY = 5e3;
 function handleRequest(request, responseStatusCode, responseHeaders, remixContext, loadContext) {
   return isbot(request.headers.get("user-agent")) ? handleBotRequest(
@@ -32,13 +32,21 @@ function handleRequest(request, responseStatusCode, responseHeaders, remixContex
 function handleBotRequest(request, responseStatusCode, responseHeaders, remixContext) {
   return new Promise((resolve, reject) => {
     let shellRendered = !1, { pipe, abort } = renderToPipeableStream(
-      /* @__PURE__ */ jsx(
+      /* @__PURE__ */ jsxDEV(
         RemixServer,
         {
           context: remixContext,
           url: request.url,
           abortDelay: ABORT_DELAY
-        }
+        },
+        void 0,
+        !1,
+        {
+          fileName: "app/entry.server.tsx",
+          lineNumber: 42,
+          columnNumber: 7
+        },
+        this
       ),
       {
         onAllReady() {
@@ -65,13 +73,21 @@ function handleBotRequest(request, responseStatusCode, responseHeaders, remixCon
 function handleBrowserRequest(request, responseStatusCode, responseHeaders, remixContext) {
   return new Promise((resolve, reject) => {
     let shellRendered = !1, { pipe, abort } = renderToPipeableStream(
-      /* @__PURE__ */ jsx(
+      /* @__PURE__ */ jsxDEV(
         RemixServer,
         {
           context: remixContext,
           url: request.url,
           abortDelay: ABORT_DELAY
-        }
+        },
+        void 0,
+        !1,
+        {
+          fileName: "app/entry.server.tsx",
+          lineNumber: 92,
+          columnNumber: 7
+        },
+        this
       ),
       {
         onShellReady() {
@@ -99,18 +115,39 @@ function handleBrowserRequest(request, responseStatusCode, responseHeaders, remi
 // app/root.tsx
 var root_exports = {};
 __export(root_exports, {
-  default: () => App
+  default: () => App,
+  loader: () => loader
 });
-import { jsx as jsx2 } from "react/jsx-runtime";
+import { json } from "@remix-run/react";
+
+// app/dbConnection/models/users.ts
+import mongoose from "mongoose";
+var UserSchema = new mongoose.Schema({
+  username: { type: String, required: !0 },
+  email: { type: String, required: !0, unique: !0 },
+  authentication: {
+    password: { type: String, required: !0, select: !1 },
+    salt: { type: String, select: !1 },
+    sessionToken: { type: String, select: !1 }
+  }
+}), UserModule = mongoose.model("User", UserSchema), getUsers = () => UserModule.find();
+
+// app/root.tsx
+import { useLoaderData } from "@remix-run/react";
+var loader = async () => {
+  let users = await getUsers();
+  return json(users);
+};
 function App() {
-  return /* @__PURE__ */ jsx2("div", { children: /* @__PURE__ */ jsx2("h1", { children: "Hello world!" }) });
+  let data = useLoaderData();
+  return JSON.stringify(data);
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { entry: { module: "/build/entry.client-KNJTI4Y2.js", imports: ["/build/_shared/chunk-DWFMXSZ6.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-VGLGM47E.js", imports: void 0, hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "510c04e7", hmr: void 0, url: "/build/manifest-510C04E7.js" };
+var assets_manifest_default = { entry: { module: "/build/entry.client-WKV7PSVD.js", imports: ["/build/_shared/chunk-ZWGWGGVF.js", "/build/_shared/chunk-XU7DNSPJ.js", "/build/_shared/chunk-LXPGIDPK.js", "/build/_shared/chunk-DM4554CJ.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-GIAAE3CH.js", "/build/_shared/chunk-BOXFZXVX.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-ANWPY5CB.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "5a554923", hmr: { runtime: "/build/_shared/chunk-DM4554CJ.js", timestamp: 1704942252959 }, url: "/build/manifest-5A554923.js" };
 
 // server-entry-module:@remix-run/dev/server-build
-var mode = "production", assetsBuildDirectory = "public/build", future = { v3_fetcherPersist: !1, v3_relativeSplatPath: !1 }, publicPath = "/build/", entry = { module: entry_server_node_exports }, routes = {
+var mode = "development", assetsBuildDirectory = "public/build", future = { v3_fetcherPersist: !1, v3_relativeSplatPath: !1 }, publicPath = "/build/", entry = { module: entry_server_exports }, routes = {
   root: {
     id: "root",
     parentId: void 0,
@@ -129,3 +166,4 @@ export {
   publicPath,
   routes
 };
+//# sourceMappingURL=index.js.map
