@@ -7,7 +7,9 @@ export default{
     ignoredRouteFiles: ["**/.*"],
     assetsBuildDirectory: "public/build",
     routes:{
-      '/weather': require.resolve('./app/routes/weather.tsx'),
+      // '/weather': require.resolve('./app/routes/weather.tsx'),
+      '/weather/forecast/:cityName': require.resolve('./app/weather.forecast.$cityName.tsx'),
+
     },
     loaderSideEffects: true,
 
