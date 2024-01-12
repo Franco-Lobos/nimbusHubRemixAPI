@@ -4,34 +4,48 @@ import express from 'express';
 import { ServerBuild } from '@remix-run/node'
 
 
+import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import router from './dbConnection/router/index.js';
+import http from 'http';
 
 // notice that the result of `remix build` is "just a module"
 import * as build from "./build/index.js";
-import { configDotenv } from "dotenv";
+import { config as dotenvConfig } from 'dotenv';
+
+
+dotenvConfig();
 
 const app = express();
 const serverBuild = build as unknown as ServerBuild;
 const mogoUrl :string = process.env.MONGO_URL!;
+const expressPort = 8080;
 
+//Middleware
 app.use(cors({
   credentials: true,
 }))
-// app.use(cors({ origin: 'http://localhost:8080' }));
-
-
+// app.use(cors({ origin: 'http://localhost:4040' }));
 app.use(compression());
 app.use(cookieParser()); //TODO : check if needed
-
 app.use(express.static("public"));
-// app.use(bodyParser.json()); !!IMPORTANT -> DO NOT USE BODY PARSER WITH REMIX IF IS A MIDDLEWARE API, IT WIL CRASH THE JSON 
+app.use(bodyParser.json());  //!!IMPORTANT -> DO NOT USE BODY PARSER WITH REMIX IF IS A MIDDLEWARE API, IT WIL CRASH THE JSON 
 
-app.all('*', 
-  createRequestHandler({
+
+//Db connection
+mongoose.Promise = Promise;
+mongoose.connect(mogoUrl);
+mongoose.connection.on('error', (error)=>console.log(error));
+
+
+// Router
+app.use('/', router());
+
+// remix management 
+app.use('/', createRequestHandler({
     // `remix build` and `remix dev` output files to a build directory, you need
     // to pass that build to the request handler
     build: serverBuild,
@@ -42,18 +56,19 @@ app.all('*',
     getLoadContext(req, res) {
       return {};
     },
-  }));
+ }));
 
-app.listen(8080, () => {
-  // if (process.env.NODE_ENV === "development") {
-  //   broadcastDevReady({ build: serverBuild });
-  // }
-  console.log("App listening on http://localhost:8080");
+
+app.all('*', (req, res) => {
+  res.status(404).send('Not Found');
 });
 
-mongoose.Promise = Promise;
-mongoose.connect(mogoUrl);
-mongoose.connection.on('error', (error)=>console.log(error));
-app.use('/', router);
+const server = http.createServer(app);
 
-
+// Start the server
+server.listen(expressPort, () => {
+  if (process.env.NODE_ENV === "development") {
+    // broadcastDevReady({ build: serverBuild });
+  }
+  console.log(`Express server listening on port ${expressPort}`);
+});
