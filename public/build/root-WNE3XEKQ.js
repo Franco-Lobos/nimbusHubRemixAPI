@@ -4,7 +4,7 @@ import {
 import {
   LiveReload,
   Outlet
-} from "/build/_shared/chunk-LSNQPJDP.js";
+} from "/build/_shared/chunk-LXPGIDPK.js";
 import {
   createHotContext
 } from "/build/_shared/chunk-DM4554CJ.js";
@@ -34,7 +34,7 @@ if (import.meta) {
     //@ts-expect-error
     "app/root.tsx"
   );
-  import.meta.hot.lastModified = "1705016171484.8474";
+  import.meta.hot.lastModified = "1705027119505.503";
 }
 function Root() {
   return /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(import_jsx_dev_runtime.Fragment, { children: [
@@ -62,4 +62,4 @@ window.$RefreshSig$ = prevRefreshSig;
 export {
   Root as default
 };
-//# sourceMappingURL=/build/root-CQCPYILM.js.map
+//# sourceMappingURL=/build/root-WNE3XEKQ.js.map

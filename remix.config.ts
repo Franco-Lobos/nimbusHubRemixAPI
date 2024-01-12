@@ -1,6 +1,6 @@
 /** @type {import('@remix-run/dev').AppConfig} */
 
-const expressRoutes: any = require('./path-to-express-routes');
+// const expressRoutes: any = require('./path-to-express-routes');
 
 export default{
     appDirectory: "app",
@@ -22,10 +22,10 @@ export default{
         os: true,
         crypto: true, 
         net: true, 
-        expressMiddleware: expressRoutes,
+        // expressMiddleware: expressRoutes,
       }
     },
   };
 
-  
+
   

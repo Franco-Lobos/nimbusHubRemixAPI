@@ -2,9 +2,6 @@ import express from 'express';
 import { getUserByEmail , createUser} from '../models/users';
 import { generateRandomString, authentication } from '../helpers';
 
-require('dotenv').config();
-
-
 export const login = async(req: express.Request, res: express.Response)=>{
     try{
         const {email, password} = req.body;

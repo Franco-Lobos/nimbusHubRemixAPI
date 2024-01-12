@@ -1,4 +1,3 @@
-require('dotenv').config();
 import crypto from 'crypto';
 
 export const generateRandomString = (length: number = 128): string => {
