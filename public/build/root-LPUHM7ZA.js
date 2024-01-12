@@ -37,7 +37,7 @@ if (import.meta) {
     //@ts-expect-error
     "app/root.tsx"
   );
-  import.meta.hot.lastModified = "1705092230626.3586";
+  import.meta.hot.lastModified = "1705092249588.2324";
 }
 function ErrorBoundary() {
   _s();
@@ -131,4 +131,4 @@ export {
   ErrorBoundary,
   Root as default
 };
-//# sourceMappingURL=/build/root-YSPD4UM5.js.map
+//# sourceMappingURL=/build/root-LPUHM7ZA.js.map
