@@ -1,11 +1,10 @@
-import {
-  useLoaderData
-} from "/build/_shared/chunk-LXPGIDPK.js";
+import "/build/_shared/chunk-BK6G5P5H.js";
+import "/build/_shared/chunk-2UEIZ2UP.js";
+import "/build/_shared/chunk-GIAAE3CH.js";
 import {
   createHotContext
 } from "/build/_shared/chunk-DM4554CJ.js";
 import "/build/_shared/chunk-UWV35TSL.js";
-import "/build/_shared/chunk-GIAAE3CH.js";
 import "/build/_shared/chunk-BOXFZXVX.js";
 import "/build/_shared/chunk-PNG5AS42.js";
 
@@ -22,21 +21,19 @@ if (!window.$RefreshReg$ || !window.$RefreshSig$ || !window.$RefreshRuntime$) {
 }
 var prevRefreshReg;
 var prevRefreshSig;
-var _s = $RefreshSig$();
 if (import.meta) {
   import.meta.hot = createHotContext(
     //@ts-expect-error
     "app/routes/user.tsx"
   );
-  import.meta.hot.lastModified = "1705028110406.7832";
+  import.meta.hot.lastModified = "1705080802592.6633";
 }
 function UserApi() {
-  _s();
-  return JSON.stringify(useLoaderData());
+  return (
+    // JSON.stringify(useLoaderData<typeof loader>())
+    "hi from user.tsx"
+  );
 }
-_s(UserApi, "UGd6Srho9ZIz3WBO/oX8v/JIOKQ=", false, function() {
-  return [useLoaderData];
-});
 _c = UserApi;
 var _c;
 $RefreshReg$(_c, "UserApi");
@@ -45,4 +42,4 @@ window.$RefreshSig$ = prevRefreshSig;
 export {
   UserApi as default
 };
-//# sourceMappingURL=/build/routes/user-UVNJCRL2.js.map
+//# sourceMappingURL=/build/routes/user-SP7NFD62.js.map

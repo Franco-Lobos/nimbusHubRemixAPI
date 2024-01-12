@@ -28,13 +28,13 @@ import type { ActionFunctionArgs } from "@remix-run/node"; // or cloudflare/deno
 // };
 
 export let loader: LoaderFunction = async ({ request }: { request: Request }) => {
-    // const users = await getUsers();
+    const users = await getUsers();
     
-    // return json(users, { headers: { 'Cache-Control': 'no-store' } });  
-    const response = await fetch('http://localhost:8080/users');
-    const data = await response.json();
+    return json(users, { headers: { 'Cache-Control': 'no-store' } });  
+    // const response = await fetch('http://localhost:8080/users');
+    // const data = await response.json();
 
-    return json(data);
+    // return json(data);
 };
 
 export default function UserApi() {
@@ -44,6 +44,7 @@ export default function UserApi() {
   //   data = useLoaderData<typeof loader>();
   // }
   return (
-    JSON.stringify(useLoaderData<typeof loader>())
+    // JSON.stringify(useLoaderData<typeof loader>())
+    "hi from user.tsx"
   );
 }

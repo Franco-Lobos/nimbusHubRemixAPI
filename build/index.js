@@ -138,23 +138,60 @@ function Root() {
   }, this);
 }
 
+// app/routes/weather.tsx
+var weather_exports = {};
+__export(weather_exports, {
+  default: () => Weather,
+  loader: () => loader
+});
+import { json } from "@remix-run/react";
+
+// dbConnection/models/users.ts
+import mongoose from "mongoose";
+var UserSchema = new mongoose.Schema({
+  username: { type: String, required: !0 },
+  email: { type: String, required: !0, unique: !0 },
+  authentication: {
+    password: { type: String, required: !0, select: !1 },
+    salt: { type: String, select: !1 },
+    sessionToken: { type: String, select: !1 }
+  }
+}), UserModule = mongoose.models.User || mongoose.model("User", UserSchema), getUsers = () => UserModule.find();
+
+// app/routes/weather.tsx
+import { jsxDEV as jsxDEV3 } from "react/jsx-dev-runtime";
+var loader = async ({ request }) => {
+  let users = await getUsers();
+  return json(users, { headers: { "Cache-Control": "no-store" } });
+};
+function Weather() {
+  return /* @__PURE__ */ jsxDEV3("h1", { children: '"hi from weather.tsx"' }, void 0, !1, {
+    fileName: "app/routes/weather.tsx",
+    lineNumber: 20,
+    columnNumber: 5
+  }, this);
+}
+
 // app/routes/user.tsx
 var user_exports = {};
 __export(user_exports, {
   default: () => UserApi,
-  loader: () => loader
+  loader: () => loader2
 });
-import { json, useLoaderData } from "@remix-run/react";
-var loader = async ({ request }) => {
-  let data = await (await fetch("http://localhost:8080/users")).json();
-  return json(data);
+import { json as json2 } from "@remix-run/react";
+var loader2 = async ({ request }) => {
+  let users = await getUsers();
+  return json2(users, { headers: { "Cache-Control": "no-store" } });
 };
 function UserApi() {
-  return JSON.stringify(useLoaderData());
+  return (
+    // JSON.stringify(useLoaderData<typeof loader>())
+    "hi from user.tsx"
+  );
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { entry: { module: "/build/entry.client-WKV7PSVD.js", imports: ["/build/_shared/chunk-ZWGWGGVF.js", "/build/_shared/chunk-XU7DNSPJ.js", "/build/_shared/chunk-LXPGIDPK.js", "/build/_shared/chunk-DM4554CJ.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-GIAAE3CH.js", "/build/_shared/chunk-BOXFZXVX.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-WNE3XEKQ.js", imports: void 0, hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/user": { id: "routes/user", parentId: "root", path: "user", index: void 0, caseSensitive: void 0, module: "/build/routes/user-UVNJCRL2.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "f4e8e452", hmr: { runtime: "/build/_shared/chunk-DM4554CJ.js", timestamp: 1705028411590 }, url: "/build/manifest-F4E8E452.js" };
+var assets_manifest_default = { entry: { module: "/build/entry.client-4GQM4DOJ.js", imports: ["/build/_shared/chunk-ZWGWGGVF.js", "/build/_shared/chunk-XU7DNSPJ.js", "/build/_shared/chunk-2UEIZ2UP.js", "/build/_shared/chunk-GIAAE3CH.js", "/build/_shared/chunk-DM4554CJ.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-BOXFZXVX.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-FDJHWVI5.js", imports: void 0, hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/user": { id: "routes/user", parentId: "root", path: "user", index: void 0, caseSensitive: void 0, module: "/build/routes/user-SP7NFD62.js", imports: ["/build/_shared/chunk-BK6G5P5H.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather": { id: "routes/weather", parentId: "root", path: "weather", index: void 0, caseSensitive: void 0, module: "/build/routes/weather-KCLOYECI.js", imports: ["/build/_shared/chunk-BK6G5P5H.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "6c3e7732", hmr: { runtime: "/build/_shared/chunk-DM4554CJ.js", timestamp: 1705082191437 }, url: "/build/manifest-6C3E7732.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var mode = "development", assetsBuildDirectory = "public/build", future = { v3_fetcherPersist: !1, v3_relativeSplatPath: !1 }, publicPath = "/build/", entry = { module: entry_server_exports }, routes = {
@@ -165,6 +202,14 @@ var mode = "development", assetsBuildDirectory = "public/build", future = { v3_f
     index: void 0,
     caseSensitive: void 0,
     module: root_exports
+  },
+  "routes/weather": {
+    id: "routes/weather",
+    parentId: "root",
+    path: "weather",
+    index: void 0,
+    caseSensitive: void 0,
+    module: weather_exports
   },
   "routes/user": {
     id: "routes/user",

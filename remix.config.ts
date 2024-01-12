@@ -6,9 +6,9 @@ export default{
     appDirectory: "app",
     ignoredRouteFiles: ["**/.*"],
     assetsBuildDirectory: "public/build",
-    // routes:{
-    //   '/user': require.resolve('./app/routes/user.tsx'),
-    // },
+    routes:{
+      '/weather': require.resolve('./app/routes/weather.tsx'),
+    },
     loaderSideEffects: true,
 
     browserNodeBuiltinsPolyfill: {
