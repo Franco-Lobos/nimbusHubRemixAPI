@@ -5,10 +5,14 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "remix dev -c \"node server.mjs\"",
     "start": "remix-serve build/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "build": "run-p build:*",
+    "build:remix": "remix build",
+    "build:server": "esbuild --platform=node --format=esm ./server.ts --outdir=./",
+    "dev": "remix dev -c \"npx tsx server.ts\"",
+    "dev:server": "nodemon --watch 'app/**' --watch 'server.ts' --exec  ./server.ts"
   },
   "keywords": [],
   "author": "",
@@ -31,16 +35,23 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "isbot": "^3.8.0",
+    "mongodb": "^6.3.0",
     "mongoose": "^8.0.4",
+    "n": "^9.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@remix-run/dev": "^2.4.1",
+    "@remix-run/dev": "latest",
     "@types/jest": "^29.5.11",
     "@types/node": "^20.10.8",
     "@types/react": "^18.2.47",
     "@types/react-dom": "^18.2.18",
+    "nodemon": "^3.0.2",
+    "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

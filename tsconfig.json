@@ -1,12 +1,14 @@
 {
-  "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx", "server.mjs", "server.mjs", "remix.config.ts"],
+  "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx", "remix.config.ts", "src/**/*.ts", "server.ts"],
+  "exclude": ["node_modules"],
   "compilerOptions": {
+    "allowImportingTsExtensions": true,
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
     "module": "commonjs",
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "target": "ES2022",
     "strict": true,
@@ -16,10 +18,9 @@
     "paths": {
       "~/*": ["./app/*"]
     },
-
-    
-
     // Remix takes care of building everything in `remix build`.
     "noEmit": true
-  }
+  },
 }
+
+

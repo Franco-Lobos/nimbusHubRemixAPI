@@ -115,12 +115,38 @@ function handleBrowserRequest(request, responseStatusCode, responseHeaders, remi
 // app/root.tsx
 var root_exports = {};
 __export(root_exports, {
-  default: () => App,
+  default: () => Root
+});
+import { Outlet, LiveReload } from "@remix-run/react";
+import { Fragment, jsxDEV as jsxDEV2 } from "react/jsx-dev-runtime";
+function Root() {
+  return /* @__PURE__ */ jsxDEV2(Fragment, { children: [
+    /* @__PURE__ */ jsxDEV2(Outlet, {}, void 0, !1, {
+      fileName: "app/root.tsx",
+      lineNumber: 8,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV2(LiveReload, {}, void 0, !1, {
+      fileName: "app/root.tsx",
+      lineNumber: 9,
+      columnNumber: 7
+    }, this)
+  ] }, void 0, !0, {
+    fileName: "app/root.tsx",
+    lineNumber: 7,
+    columnNumber: 5
+  }, this);
+}
+
+// app/routes/user.tsx
+var user_exports = {};
+__export(user_exports, {
+  default: () => User,
   loader: () => loader
 });
-import { json } from "@remix-run/react";
+import { json, useLoaderData } from "@remix-run/react";
 
-// app/dbConnection/models/users.ts
+// dbConnection/models/users.ts
 import mongoose from "mongoose";
 var UserSchema = new mongoose.Schema({
   username: { type: String, required: !0 },
@@ -132,19 +158,17 @@ var UserSchema = new mongoose.Schema({
   }
 }), UserModule = mongoose.model("User", UserSchema), getUsers = () => UserModule.find();
 
-// app/root.tsx
-import { useLoaderData } from "@remix-run/react";
-var loader = async () => {
+// app/routes/user.tsx
+var loader = async ({ request }) => {
   let users = await getUsers();
-  return json(users);
+  return json(users, { headers: { "Cache-Control": "no-store" } });
 };
-function App() {
-  let data = useLoaderData();
-  return JSON.stringify(data);
+function User() {
+  return JSON.stringify(useLoaderData());
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { entry: { module: "/build/entry.client-WKV7PSVD.js", imports: ["/build/_shared/chunk-ZWGWGGVF.js", "/build/_shared/chunk-XU7DNSPJ.js", "/build/_shared/chunk-LXPGIDPK.js", "/build/_shared/chunk-DM4554CJ.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-GIAAE3CH.js", "/build/_shared/chunk-BOXFZXVX.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-ANWPY5CB.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "5a554923", hmr: { runtime: "/build/_shared/chunk-DM4554CJ.js", timestamp: 1704942252959 }, url: "/build/manifest-5A554923.js" };
+var assets_manifest_default = { entry: { module: "/build/entry.client-B7MJA4CL.js", imports: ["/build/_shared/chunk-ZWGWGGVF.js", "/build/_shared/chunk-XU7DNSPJ.js", "/build/_shared/chunk-LSNQPJDP.js", "/build/_shared/chunk-DM4554CJ.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-GIAAE3CH.js", "/build/_shared/chunk-BOXFZXVX.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-CQCPYILM.js", imports: void 0, hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/user": { id: "routes/user", parentId: "root", path: "user", index: void 0, caseSensitive: void 0, module: "/build/routes/user-F6GQXR5T.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "891e6a9f", hmr: { runtime: "/build/_shared/chunk-DM4554CJ.js", timestamp: 1705024803382 }, url: "/build/manifest-891E6A9F.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var mode = "development", assetsBuildDirectory = "public/build", future = { v3_fetcherPersist: !1, v3_relativeSplatPath: !1 }, publicPath = "/build/", entry = { module: entry_server_exports }, routes = {
@@ -155,6 +179,14 @@ var mode = "development", assetsBuildDirectory = "public/build", future = { v3_f
     index: void 0,
     caseSensitive: void 0,
     module: root_exports
+  },
+  "routes/user": {
+    id: "routes/user",
+    parentId: "root",
+    path: "user",
+    index: void 0,
+    caseSensitive: void 0,
+    module: user_exports
   }
 };
 export {
