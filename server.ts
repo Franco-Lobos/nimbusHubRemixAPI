@@ -29,11 +29,12 @@ const expressPort = 8080;
 app.use(cors({
   credentials: true,
 }))
-// app.use(cors({ origin: 'http://localhost:4040' }));
+app.use(cors({ origin: 'http://localhost:3000' }));
+
 app.use(compression());
 app.use(cookieParser()); //TODO : check if needed
 app.use(express.static("public"));
-app.use(bodyParser.json());  //!!IMPORTANT -> DO NOT USE BODY PARSER WITH REMIX IF IS A MIDDLEWARE API, IT WIL CRASH THE JSON 
+app.use(bodyParser.json());  //!!IMPORTANT -> DO NOT USE BODYPARSER WITH REMIX IF IS A MIDDLEWARE API, IT WIL CRASH THE JSON 
 
 
 //Db connection
