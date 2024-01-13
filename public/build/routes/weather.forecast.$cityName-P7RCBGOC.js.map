@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["browser-route-module:routes/weather.forecast.$cityName.tsx?browser"],
+  "sourcesContent": ["module.exports = {};"],
+  "mappings": ";;;;;AAAA;AAAA;AAAA,WAAO,UAAU,CAAC;AAAA;AAAA;",
+  "names": []
+}

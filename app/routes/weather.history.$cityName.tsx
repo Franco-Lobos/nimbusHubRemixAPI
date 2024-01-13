@@ -1,6 +1,6 @@
 import { json} from "@remix-run/react";
 import {  LoaderFunction } from "@remix-run/node";
-import { getWeatherForecast } from "~/services/tomorrowAPI";
+import { getWeatherForecast, getWeatherRecentHistory } from "~/services/tomorrowAPI";
 
 
 export let loader: LoaderFunction = async ({ params }) => {
@@ -10,7 +10,7 @@ export let loader: LoaderFunction = async ({ params }) => {
   }
 
   try {
-    return await getWeatherForecast(cityName);;
+    return await getWeatherRecentHistory(cityName);
   } catch (error) {
     console.error('Error fetching weather data:', error);
     return json({ error: 'Failed to fetch weather data' }, { status: 500 });
