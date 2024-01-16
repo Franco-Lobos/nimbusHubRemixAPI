@@ -5,12 +5,12 @@ const baseUrl= "https://api.tomorrow.io/v4/weather/";
 
 export const getWeatherForecast = async (location: string) => {
     location = convertToURLfriendly(location);
-    const tomorrowUrl = `${baseUrl}/forecast?location=${location}`; // TODO SAVE IN CONSTANTS
+    const tomorrowUrl = `${process.env.BASE_URL}/forecast?location=${location}`; // TODO SAVE IN CONSTANTS
 
     const data = await fetch(tomorrowUrl, {
         method: 'GET', 
         headers:{
-          apikey: "9pIbRDZ6vY2jEUckr5BZ7tSOcJsJScrw", // TODO SAVE IN.ENV
+          apikey: process.env.NIMBUS_API_KEY!, // TODO SAVE IN.ENV
           accept: 'application/json'
         }
       })
@@ -20,12 +20,12 @@ export const getWeatherForecast = async (location: string) => {
 
 export const getRealTimeWeather = async (location: string) => {
     location = convertToURLfriendly(location);
-    const tomorrowUrl = `${baseUrl}/realtime?location=${location}`; // TODO SAVE IN CONSTANTS
+    const tomorrowUrl = `${process.env.BASE_URL}/realtime?location=${location}`; // TODO SAVE IN CONSTANTS
 
     const data = await fetch(tomorrowUrl, {
         method: 'GET', 
         headers:{
-          apikey: "9pIbRDZ6vY2jEUckr5BZ7tSOcJsJScrw", // TODO SAVE IN.ENV
+          apikey:  process.env.NIMBUS_API_KEY!, // TODO SAVE IN.ENV
           accept: 'application/json'
         }
       })
@@ -34,12 +34,12 @@ export const getRealTimeWeather = async (location: string) => {
 
 export const getWeatherRecentHistory = async (location: string) => {
     location = convertToURLfriendly(location);
-    const tomorrowUrl = `${baseUrl}/history/recent?location=${location}`; // TODO SAVE IN CONSTANTS
+    const tomorrowUrl = `${process.env.BASE_URL}/history/recent?location=${location}`; // TODO SAVE IN CONSTANTS
 
     const data = await fetch(tomorrowUrl, {
         method: 'GET', 
         headers:{
-          apikey: "9pIbRDZ6vY2jEUckr5BZ7tSOcJsJScrw", // TODO SAVE IN.ENV
+          apikey:  process.env.NIMBUS_API_KEY!, // TODO SAVE IN.ENV
           accept: 'application/json'
         }
       })

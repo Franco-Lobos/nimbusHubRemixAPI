@@ -211,12 +211,12 @@ function convertToURLfriendly(string) {
 }
 
 // app/services/tomorrowAPI.tsx
-var baseUrl = "https://api.tomorrow.io/v4/weather/", getWeatherForecast = async (location) => {
+var getWeatherForecast = async (location) => {
   location = convertToURLfriendly(location);
-  let tomorrowUrl = `${baseUrl}/forecast?location=${location}`, data = await fetch(tomorrowUrl, {
+  let tomorrowUrl = `${process.env.BASE_URL}/forecast?location=${location}`, data = await fetch(tomorrowUrl, {
     method: "GET",
     headers: {
-      apikey: "9pIbRDZ6vY2jEUckr5BZ7tSOcJsJScrw",
+      apikey: process.env.NIMBUS_API_KEY,
       // TODO SAVE IN.ENV
       accept: "application/json"
     }
@@ -224,10 +224,10 @@ var baseUrl = "https://api.tomorrow.io/v4/weather/", getWeatherForecast = async 
   return json(await data.json());
 }, getRealTimeWeather = async (location) => {
   location = convertToURLfriendly(location);
-  let tomorrowUrl = `${baseUrl}/realtime?location=${location}`, data = await fetch(tomorrowUrl, {
+  let tomorrowUrl = `${process.env.BASE_URL}/realtime?location=${location}`, data = await fetch(tomorrowUrl, {
     method: "GET",
     headers: {
-      apikey: "9pIbRDZ6vY2jEUckr5BZ7tSOcJsJScrw",
+      apikey: process.env.NIMBUS_API_KEY,
       // TODO SAVE IN.ENV
       accept: "application/json"
     }
@@ -235,10 +235,10 @@ var baseUrl = "https://api.tomorrow.io/v4/weather/", getWeatherForecast = async 
   return json(await data.json());
 }, getWeatherRecentHistory = async (location) => {
   location = convertToURLfriendly(location);
-  let tomorrowUrl = `${baseUrl}/history/recent?location=${location}`, data = await fetch(tomorrowUrl, {
+  let tomorrowUrl = `${process.env.BASE_URL}/history/recent?location=${location}`, data = await fetch(tomorrowUrl, {
     method: "GET",
     headers: {
-      apikey: "9pIbRDZ6vY2jEUckr5BZ7tSOcJsJScrw",
+      apikey: process.env.NIMBUS_API_KEY,
       // TODO SAVE IN.ENV
       accept: "application/json"
     }
@@ -325,7 +325,7 @@ function UserApi() {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { entry: { module: "/build/entry.client-URQ7IOUN.js", imports: ["/build/_shared/chunk-ZWGWGGVF.js", "/build/_shared/chunk-XU7DNSPJ.js", "/build/_shared/chunk-LSNQPJDP.js", "/build/_shared/chunk-DM4554CJ.js", "/build/_shared/chunk-GIAAE3CH.js", "/build/_shared/chunk-BOXFZXVX.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-IGSPRLF6.js", imports: void 0, hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !0 }, "routes/user": { id: "routes/user", parentId: "root", path: "user", index: void 0, caseSensitive: void 0, module: "/build/routes/user-P6HEPSCS.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.forecast.$cityName": { id: "routes/weather.forecast.$cityName", parentId: "root", path: "weather/forecast/:cityName", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.forecast.$cityName-P7RCBGOC.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.history.$cityName": { id: "routes/weather.history.$cityName", parentId: "root", path: "weather/history/:cityName", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.history.$cityName-H65TCG7E.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.realtime.$cityName": { id: "routes/weather.realtime.$cityName", parentId: "root", path: "weather/realtime/:cityName", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.realtime.$cityName-KDSK4HY5.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "96aaa349", hmr: { runtime: "/build/_shared/chunk-DM4554CJ.js", timestamp: 1705113434828 }, url: "/build/manifest-96AAA349.js" };
+var assets_manifest_default = { entry: { module: "/build/entry.client-URQ7IOUN.js", imports: ["/build/_shared/chunk-ZWGWGGVF.js", "/build/_shared/chunk-XU7DNSPJ.js", "/build/_shared/chunk-LSNQPJDP.js", "/build/_shared/chunk-DM4554CJ.js", "/build/_shared/chunk-GIAAE3CH.js", "/build/_shared/chunk-BOXFZXVX.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-IGSPRLF6.js", imports: void 0, hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !0 }, "routes/user": { id: "routes/user", parentId: "root", path: "user", index: void 0, caseSensitive: void 0, module: "/build/routes/user-P6HEPSCS.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.forecast.$cityName": { id: "routes/weather.forecast.$cityName", parentId: "root", path: "weather/forecast/:cityName", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.forecast.$cityName-P7RCBGOC.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.history.$cityName": { id: "routes/weather.history.$cityName", parentId: "root", path: "weather/history/:cityName", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.history.$cityName-H65TCG7E.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.realtime.$cityName": { id: "routes/weather.realtime.$cityName", parentId: "root", path: "weather/realtime/:cityName", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.realtime.$cityName-KDSK4HY5.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "96aaa349", hmr: { runtime: "/build/_shared/chunk-DM4554CJ.js", timestamp: 1705367705401 }, url: "/build/manifest-96AAA349.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var mode = "development", assetsBuildDirectory = "public/build", future = { v3_fetcherPersist: !1, v3_relativeSplatPath: !1 }, publicPath = "/build/", entry = { module: entry_server_exports }, routes = {
