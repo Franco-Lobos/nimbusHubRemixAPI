@@ -25,14 +25,11 @@ const serverBuild = build as unknown as ServerBuild;
 const mogoUrl :string = process.env.MONGO_URL!;
 const expressPort = 8080;
 
-//Middleware
-app.use(cors({
-  credentials: true,
-}))
-app.use(cors({ origin: 'http://localhost:3000' }));
+
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 
 app.use(compression());
-app.use(cookieParser()); //TODO : check if needed
+app.use(cookieParser()); 
 app.use(express.static("public"));
 app.use(bodyParser.json());  //!!IMPORTANT -> DO NOT USE BODYPARSER WITH REMIX IF IS A MIDDLEWARE API, IT WIL CRASH THE JSON 
 
