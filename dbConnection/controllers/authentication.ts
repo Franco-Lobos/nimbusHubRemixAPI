@@ -36,8 +36,11 @@ export const login = async(req: express.Request, res: express.Response)=>{
             httpOnly: true,
             maxAge: 12 * 60 * 60 * 1000, // twelveHoursInMilliseconds  12 * 60 * 60 * 1000,
             secure: true, 
-        }); 
-        return res.status(200).json(user).end();
+        });
+        const ipAddress = req.ip || req.connection.remoteAddress;
+
+
+        return res.status(200).json({user, ipAddress: ipAddress}).end();
 
     } catch(error){
         console.log(error);
