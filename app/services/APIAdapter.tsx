@@ -11,7 +11,7 @@ import { RealTimeData } from "~/models/sent/_RealTime";
 import { DailyItem } from "~/models/sent/_WeatherDaily";
 import { HourlyItem } from "~/models/sent/_WeatherHourly";
 import { WeatherLocation } from "~/models/sent/_WeatherLocation";
-import { MinutelyItem } from "~/models/sent/_WeatherMinutely";
+import { MinutelyItem } from "~/models/sent/WeatherMinutely";
 
 // Conversion function for minutely data
 function convertMinutelyItem(apiMinutelyItem: APIMinutelyItem): MinutelyItem {

@@ -16,6 +16,8 @@ export let loader: LoaderFunction = async ({ params }) => {
     const recievedData = await getWeatherForecast(cityName);
     const parsedData: APIForecastWeatherData = recievedData as APIForecastWeatherData;
     const convertedData: ForecastWeatherData = convertForecastData(parsedData)
+
+    //ANALIZE TO SAVE IN DB
     return convertedData;
   } catch (error) {
     console.error('Error fetching weather data:', error);

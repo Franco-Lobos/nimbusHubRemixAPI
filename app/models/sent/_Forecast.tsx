@@ -1,5 +1,5 @@
 import { WeatherLocation } from "./_WeatherLocation";
-import { MinutelyItem } from "./_WeatherMinutely";
+import { MinutelyItem } from "./WeatherMinutely";
 import { HourlyItem } from "./_WeatherHourly";
 import { DailyItem } from "./_WeatherDaily";
 

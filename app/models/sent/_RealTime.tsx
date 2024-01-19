@@ -1,5 +1,5 @@
 import { WeatherLocation } from "./_WeatherLocation";
-import { MinutelyItem, isMinutelyItem } from "./_WeatherMinutely";
+import { MinutelyItem, isMinutelyItem } from "./WeatherMinutely";
 import {isWeatherLocation} from "./_WeatherLocation";
 
 export interface RealTimeData {
