@@ -38,6 +38,12 @@ app.use(bodyParser.json());  //!!IMPORTANT -> DO NOT USE BODYPARSER WITH REMIX I
 mongoose.Promise = Promise;
 mongoose.connect(mogoUrl);
 mongoose.connection.on('error', (error)=>console.log(error));
+mongoose.connection.once('open', function() {
+  console.log("mongodb connection open");
+});
+mongoose.connection.on('disconnected', function () {  
+  console.log('Mongoose default connection disconnected'); 
+});
 
 
 // Router

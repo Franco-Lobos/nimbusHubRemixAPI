@@ -4,6 +4,7 @@ import { convertToURLfriendly } from "~/library/stringManagement";
 const baseUrl= "https://api.tomorrow.io/v4/weather/";
 
 export const getWeatherForecast = async (location: string) => {
+    console.log("LOCATION-FORE:", location)
     location = convertToURLfriendly(location);
     const tomorrowUrl = `${process.env.BASE_URL}/forecast?location=${location}`; // TODO SAVE IN CONSTANTS
 
@@ -14,7 +15,7 @@ export const getWeatherForecast = async (location: string) => {
           accept: 'application/json'
         }
       })
-    return json(await data.json())
+    return await data.json()
 }
 
 
@@ -29,7 +30,7 @@ export const getRealTimeWeather = async (location: string) => {
           accept: 'application/json'
         }
       })
-    return json(await data.json())
+    return await data.json()
 }
 
 export const getWeatherRecentHistory = async (location: string) => {
@@ -43,5 +44,5 @@ export const getWeatherRecentHistory = async (location: string) => {
           accept: 'application/json'
         }
       })
-    return json(await data.json())
+    return await data.json()
 }

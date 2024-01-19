@@ -200,10 +200,7 @@ var weather_forecast_cityName_exports = {};
 __export(weather_forecast_cityName_exports, {
   loader: () => loader
 });
-import { json as json2 } from "@remix-run/react";
-
-// app/services/tomorrowAPI.tsx
-import { json } from "@remix-run/node";
+import { json } from "@remix-run/react";
 
 // app/library/stringManagement.tsx
 function convertToURLfriendly(string) {
@@ -212,49 +209,123 @@ function convertToURLfriendly(string) {
 
 // app/services/tomorrowAPI.tsx
 var getWeatherForecast = async (location) => {
-  location = convertToURLfriendly(location);
-  let tomorrowUrl = `${process.env.BASE_URL}/forecast?location=${location}`, data = await fetch(tomorrowUrl, {
+  console.log("LOCATION-FORE:", location), location = convertToURLfriendly(location);
+  let tomorrowUrl = `${process.env.BASE_URL}/forecast?location=${location}`;
+  return await (await fetch(tomorrowUrl, {
     method: "GET",
     headers: {
       apikey: process.env.NIMBUS_API_KEY,
       // TODO SAVE IN.ENV
       accept: "application/json"
     }
-  });
-  return json(await data.json());
+  })).json();
 }, getRealTimeWeather = async (location) => {
   location = convertToURLfriendly(location);
-  let tomorrowUrl = `${process.env.BASE_URL}/realtime?location=${location}`, data = await fetch(tomorrowUrl, {
+  let tomorrowUrl = `${process.env.BASE_URL}/realtime?location=${location}`;
+  return await (await fetch(tomorrowUrl, {
     method: "GET",
     headers: {
       apikey: process.env.NIMBUS_API_KEY,
       // TODO SAVE IN.ENV
       accept: "application/json"
     }
-  });
-  return json(await data.json());
+  })).json();
 }, getWeatherRecentHistory = async (location) => {
   location = convertToURLfriendly(location);
-  let tomorrowUrl = `${process.env.BASE_URL}/history/recent?location=${location}`, data = await fetch(tomorrowUrl, {
+  let tomorrowUrl = `${process.env.BASE_URL}/history/recent?location=${location}`;
+  return await (await fetch(tomorrowUrl, {
     method: "GET",
     headers: {
       apikey: process.env.NIMBUS_API_KEY,
       // TODO SAVE IN.ENV
       accept: "application/json"
     }
-  });
-  return json(await data.json());
+  })).json();
 };
+
+// app/services/APIAdapter.tsx
+function convertMinutelyItem(apiMinutelyItem) {
+  return {
+    time: apiMinutelyItem.time,
+    values: {
+      temperature: apiMinutelyItem.values.temperature,
+      temperatureApparent: apiMinutelyItem.values.temperatureApparent,
+      weatherCode: apiMinutelyItem.values.weatherCode
+      // Add other properties as needed
+    }
+  };
+}
+function convertHourlyItem(apiHourlyItem) {
+  return {
+    time: apiHourlyItem.time,
+    values: {
+      temperature: apiHourlyItem.values.temperature,
+      temperatureApparent: apiHourlyItem.values.temperatureApparent,
+      weatherCode: apiHourlyItem.values.weatherCode
+      // Add other properties as needed
+    }
+  };
+}
+function convertDailyItem(apiDailyItem) {
+  return {
+    time: apiDailyItem.time,
+    values: {
+      temperatureApparentAvg: apiDailyItem.values.temperatureApparentAvg,
+      temperatureApparentMax: apiDailyItem.values.temperatureApparentMax,
+      temperatureApparentMin: apiDailyItem.values.temperatureApparentMin,
+      temperatureAvg: apiDailyItem.values.temperatureAvg,
+      temperatureMax: apiDailyItem.values.temperatureMax,
+      temperatureMin: apiDailyItem.values.temperatureMin,
+      weatherCodeMax: apiDailyItem.values.weatherCodeMax,
+      weatherCodeMin: apiDailyItem.values.weatherCodeMin
+      // Add other properties as needed
+    }
+  };
+}
+function convertWeatherLocation(apiLocation) {
+  return {
+    lat: apiLocation.lat,
+    lon: apiLocation.lon,
+    name: apiLocation.name,
+    type: apiLocation.type
+  };
+}
+function convertForecastData(apiForecastData) {
+  return {
+    timelines: {
+      minutely: apiForecastData.timelines.minutely.map(convertMinutelyItem),
+      hourly: apiForecastData.timelines.hourly.map(convertHourlyItem),
+      daily: apiForecastData.timelines.daily.map(convertDailyItem)
+    },
+    location: convertWeatherLocation(apiForecastData.location)
+  };
+}
+function convertRealTimeData(apiRealTimeData) {
+  return {
+    data: convertMinutelyItem(apiRealTimeData.data),
+    location: convertWeatherLocation(apiRealTimeData.location)
+  };
+}
+function convertHistoryData(apiHistoryData) {
+  return {
+    timelines: {
+      hourly: apiHistoryData.timelines.hourly.map(convertHourlyItem),
+      daily: apiHistoryData.timelines.daily.map(convertDailyItem)
+    },
+    location: convertWeatherLocation(apiHistoryData.location)
+  };
+}
 
 // app/routes/weather.forecast.$cityName.tsx
 var loader = async ({ params }) => {
   let { cityName } = params;
   if (!cityName)
-    return json2({ error: "City name is missing" }, { status: 400 });
+    return json({ error: "City name is missing" }, { status: 400 });
   try {
-    return await getWeatherForecast(cityName);
+    let parsedData = await getWeatherForecast(cityName);
+    return convertForecastData(parsedData);
   } catch (error) {
-    return console.error("Error fetching weather data:", error), json2({ error: "Failed to fetch weather data" }, { status: 500 });
+    return console.error("Error fetching weather data:", error), json({ error: "Failed to fetch weather data" }, { status: 500 });
   }
 };
 
@@ -263,15 +334,16 @@ var weather_realtime_cityName_exports = {};
 __export(weather_realtime_cityName_exports, {
   loader: () => loader2
 });
-import { json as json3 } from "@remix-run/react";
+import { json as json2 } from "@remix-run/react";
 var loader2 = async ({ params }) => {
   let { cityName } = params;
   if (!cityName)
-    return json3({ error: "City name is missing" }, { status: 400 });
+    return json2({ error: "City name is missing" }, { status: 400 });
   try {
-    return await getRealTimeWeather(cityName);
+    let parsedData = await getRealTimeWeather(cityName);
+    return convertRealTimeData(parsedData);
   } catch (error) {
-    return console.error("Error fetching weather data:", error), json3({ error: "Failed to fetch weather data" }, { status: 500 });
+    return console.error("Error fetching weather data:", error), json2({ error: "Failed to fetch weather data" }, { status: 500 });
   }
 };
 
@@ -280,15 +352,16 @@ var weather_history_cityName_exports = {};
 __export(weather_history_cityName_exports, {
   loader: () => loader3
 });
-import { json as json4 } from "@remix-run/react";
+import { json as json3 } from "@remix-run/react";
 var loader3 = async ({ params }) => {
   let { cityName } = params;
   if (!cityName)
-    return json4({ error: "City name is missing" }, { status: 400 });
+    return json3({ error: "City name is missing" }, { status: 400 });
   try {
-    return await getWeatherRecentHistory(cityName);
+    let parsedData = await getWeatherRecentHistory(cityName);
+    return convertHistoryData(parsedData);
   } catch (error) {
-    return console.error("Error fetching weather data:", error), json4({ error: "Failed to fetch weather data" }, { status: 500 });
+    return console.error("Error fetching weather data:", error), json3({ error: "Failed to fetch weather data" }, { status: 500 });
   }
 };
 
@@ -298,7 +371,7 @@ __export(user_exports, {
   default: () => UserApi,
   loader: () => loader4
 });
-import { json as json5 } from "@remix-run/react";
+import { json as json4 } from "@remix-run/react";
 
 // dbConnection/models/users.ts
 import mongoose from "mongoose";
@@ -315,7 +388,7 @@ var UserSchema = new mongoose.Schema({
 // app/routes/user.tsx
 var loader4 = async ({ request }) => {
   let users = await getUsers();
-  return json5(users, { headers: { "Cache-Control": "no-store" } });
+  return json4(users, { headers: { "Cache-Control": "no-store" } });
 };
 function UserApi() {
   return (
@@ -325,7 +398,7 @@ function UserApi() {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { entry: { module: "/build/entry.client-A3MVWUQZ.js", imports: ["/build/_shared/chunk-ZWGWGGVF.js", "/build/_shared/chunk-XU7DNSPJ.js", "/build/_shared/chunk-LXPGIDPK.js", "/build/_shared/chunk-DM4554CJ.js", "/build/_shared/chunk-GIAAE3CH.js", "/build/_shared/chunk-BOXFZXVX.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-4P2OIDZI.js", imports: void 0, hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !0 }, "routes/user": { id: "routes/user", parentId: "root", path: "user", index: void 0, caseSensitive: void 0, module: "/build/routes/user-R27QRQ4A.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.forecast.$cityName": { id: "routes/weather.forecast.$cityName", parentId: "root", path: "weather/forecast/:cityName", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.forecast.$cityName-P7RCBGOC.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.history.$cityName": { id: "routes/weather.history.$cityName", parentId: "root", path: "weather/history/:cityName", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.history.$cityName-H65TCG7E.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.realtime.$cityName": { id: "routes/weather.realtime.$cityName", parentId: "root", path: "weather/realtime/:cityName", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.realtime.$cityName-KDSK4HY5.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "856b5c0e", hmr: { runtime: "/build/_shared/chunk-DM4554CJ.js", timestamp: 1705461348105 }, url: "/build/manifest-856B5C0E.js" };
+var assets_manifest_default = { entry: { module: "/build/entry.client-URQ7IOUN.js", imports: ["/build/_shared/chunk-ZWGWGGVF.js", "/build/_shared/chunk-XU7DNSPJ.js", "/build/_shared/chunk-LSNQPJDP.js", "/build/_shared/chunk-DM4554CJ.js", "/build/_shared/chunk-GIAAE3CH.js", "/build/_shared/chunk-BOXFZXVX.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-IGSPRLF6.js", imports: void 0, hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !0 }, "routes/user": { id: "routes/user", parentId: "root", path: "user", index: void 0, caseSensitive: void 0, module: "/build/routes/user-P6HEPSCS.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.forecast.$cityName": { id: "routes/weather.forecast.$cityName", parentId: "root", path: "weather/forecast/:cityName", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.forecast.$cityName-P7RCBGOC.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.history.$cityName": { id: "routes/weather.history.$cityName", parentId: "root", path: "weather/history/:cityName", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.history.$cityName-H65TCG7E.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.realtime.$cityName": { id: "routes/weather.realtime.$cityName", parentId: "root", path: "weather/realtime/:cityName", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.realtime.$cityName-KDSK4HY5.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "96aaa349", hmr: { runtime: "/build/_shared/chunk-DM4554CJ.js", timestamp: 1705684679201 }, url: "/build/manifest-96AAA349.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var mode = "development", assetsBuildDirectory = "public/build", future = { v3_fetcherPersist: !1, v3_relativeSplatPath: !1 }, publicPath = "/build/", entry = { module: entry_server_exports }, routes = {
