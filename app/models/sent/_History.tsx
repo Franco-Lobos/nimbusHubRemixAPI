@@ -1,4 +1,4 @@
-import { WeatherLocation } from "./_WeatherLocation";
+import { WeatherLocation, isWeatherLocation } from "./_WeatherLocation";
 import { MinutelyItem } from "./_WeatherMinutely";
 import { HourlyItem } from "./_WeatherHourly";
 import { DailyItem } from "./_WeatherDaily";
@@ -20,7 +20,7 @@ export function isHistoryData(obj: any): obj is HistoryData {
         'daily' in obj.timelines &&
         Array.isArray(obj.timelines.daily) &&
         'location' in obj &&
-        typeof obj.location === 'object'
+        isWeatherLocation(obj.location)
         // Add additional checks if necessary based on the actual types of WeatherLocation, MinutelyItem, HourlyItem, DailyItem
     );
 }

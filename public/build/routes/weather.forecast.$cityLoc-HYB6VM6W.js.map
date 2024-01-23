@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "sources": ["browser-route-module:routes/weather.realtime.$cityName.tsx?browser"],
+  "sources": ["browser-route-module:routes/weather.forecast.$cityLoc.tsx?browser"],
   "sourcesContent": ["module.exports = {};"],
   "mappings": ";;;;;AAAA;AAAA;AAAA,WAAO,UAAU,CAAC;AAAA;AAAA;",
   "names": []

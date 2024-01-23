@@ -3,6 +3,7 @@ import pkg from 'lodash';
 
 import { getUserBySessionToken } from '../models/users';
 import {verifySessionToken} from '../helpers/index';
+import { ErrorManager } from '~/utils/ErrorManager';
 
 const { get, merge } = pkg;
 export const isOwner = async (req:express.Request, res:express.Response, next: express.NextFunction) => {
@@ -11,18 +12,19 @@ export const isOwner = async (req:express.Request, res:express.Response, next: e
         const currentUserId = get(req, 'identity._id') as unknown as string;
 
         if(!currentUserId){
-            res.sendStatus(403);
+            // res.sendStatus(403);
+            return res.status(403).json(ErrorManager(403));
         }
 
         if(currentUserId.toString() !== id){
-            res.sendStatus(403);
+            return res.status(403).json(ErrorManager(403));
         }
 
         next();
 
     }catch(error){
         console.log(error);
-        res.sendStatus(400);
+        return res.status(500).json(ErrorManager(500));
     }
 }
 
@@ -30,21 +32,21 @@ export const isAuthenticated = async (req:express.Request, res:express.Response,
     try{
 
         // Check if it exist
-        const sessionToken = req.cookies['NIMBUS-AUTH'];
-        console.log(req.cookies);
+        const sessionToken = req.cookies[process.env.NIMBUS_AUTH!];
+
         if(!sessionToken){
-            return res.status(401).json({ message: 'Unauthorized - Missing session token' });
+            return res.status(401).json(ErrorManager(401));
         }
 
         // Check if it has expired
         const isTokenValid = verifySessionToken(sessionToken);
         if (!isTokenValid) {
-            return res.status(401).json({ message: 'Unauthorized - Expired session token' });
+            return res.status(403).json(ErrorManager(403));
         }
 
         const extingUser = await getUserBySessionToken (sessionToken);
         if(!extingUser){
-            return res.sendStatus(403);
+            return res.status(403).json(ErrorManager(403));
         }
 
         merge(req, {identity:extingUser});
@@ -53,6 +55,6 @@ export const isAuthenticated = async (req:express.Request, res:express.Response,
 
     }catch(error){
         console.log(error);
-        res.status(400);
+        return res.status(500).json(ErrorManager(500));
     }
 }

@@ -5,7 +5,6 @@ const baseUrl= "https://api.tomorrow.io/v4/weather/";
 
 export const getWeatherForecast = async (location: string) => {
     console.log("LOCATION-FORE:", location)
-    location = convertToURLfriendly(location);
     const tomorrowUrl = `${process.env.BASE_URL}/forecast?location=${location}`; // TODO SAVE IN CONSTANTS
 
     const data = await fetch(tomorrowUrl, {

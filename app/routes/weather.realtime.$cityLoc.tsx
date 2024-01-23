@@ -4,21 +4,22 @@ import { getRealTimeWeather, getWeatherForecast, getWeatherRecentHistory } from 
 import { APIRealTimeData } from "~/models/recieved/_RealTime";
 import { convertRealTimeData } from "~/services/APIAdapter";
 import { RealTimeData } from "~/models/sent/_RealTime";
+import { ErrorManager } from "~/utils/ErrorManager";
 
 
 export let loader: LoaderFunction = async ({ params }) => {
-  const { cityName } = params;
-  if (!cityName) {
-    return json({ error: 'City name is missing' }, { status: 400 });
+  const { cityLoc } = params;
+  if (!cityLoc) {
+    return json(ErrorManager(402), {status: 402});
   }
 
   try {
-    const recievedData = await getRealTimeWeather(cityName);
+    const recievedData = await getRealTimeWeather(cityLoc);
     const parsedData: APIRealTimeData = recievedData as APIRealTimeData;
     const convertedData: RealTimeData = convertRealTimeData(parsedData)
     return convertedData;
   } catch (error) {
     console.error('Error fetching weather data:', error);
-    return json({ error: 'Failed to fetch weather data' }, { status: 500 });
+    return json(ErrorManager(500), {status: 500});
   }
 };

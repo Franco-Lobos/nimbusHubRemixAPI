@@ -3,6 +3,7 @@ import { getUserByEmail , createUser} from '../models/users';
 import { generateRandomString, authentication } from '../helpers';
 
 import jwt from 'jsonwebtoken';
+import { ErrorManager } from '~/utils/ErrorManager';
 const { sign, verify } = jwt;
 export const login = async(req: express.Request, res: express.Response)=>{
     try{
@@ -32,9 +33,10 @@ export const login = async(req: express.Request, res: express.Response)=>{
 
         await user.save(); 
 
-        res.cookie('NIMBUS-AUTH', user.authentication.sessionToken, {
+        res.cookie(process.env.NIMBUS_AUTH!, user.authentication.sessionToken, {
             httpOnly: true,
-            maxAge: 12 * 60 * 60 * 1000, // twelveHoursInMilliseconds  12 * 60 * 60 * 1000,
+            // maxAge: 12 * 60 * 60 * 1000, // twelveHoursInMilliseconds  12 * 60 * 60 * 1000,
+            maxAge:  10000, // twelveHoursInMilliseconds  12 * 60 * 60 * 1000,
             secure: true, 
         });
         const ipAddress = req.ip || req.connection.remoteAddress;
@@ -44,7 +46,7 @@ export const login = async(req: express.Request, res: express.Response)=>{
 
     } catch(error){
         console.log(error);
-        return res.sendStatus(400);
+        return res.status(500).json(ErrorManager(500));
     }
 }
 
@@ -76,6 +78,6 @@ export const register  = async(req: express.Request, res: express.Response)=>{
 
     }catch(error){
         console.log("SERVER AUTHENTICATION ERROR:",error);
-        return res.sendStatus(400)
+        return res.status(500).json(ErrorManager(500));
     }
 }

@@ -11,7 +11,7 @@ export interface APIHistoryData {
     location: APIWeatherLocation;
 }
 
-export function isAPIHistoryData(obj: any): obj is APIHistoryData {
+export function isAPIHistoryData(obj: any): Boolean {
     return (
         'timelines' in obj &&
         typeof obj.timelines === 'object' &&
