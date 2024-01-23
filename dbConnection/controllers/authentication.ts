@@ -35,8 +35,7 @@ export const login = async(req: express.Request, res: express.Response)=>{
 
         res.cookie(process.env.NIMBUS_AUTH!, user.authentication.sessionToken, {
             httpOnly: true,
-            // maxAge: 12 * 60 * 60 * 1000, // twelveHoursInMilliseconds  12 * 60 * 60 * 1000,
-            maxAge:  10000, // twelveHoursInMilliseconds  12 * 60 * 60 * 1000,
+            maxAge: 60 * 60 * 1000, // twelveHoursInMilliseconds  12 * 60 * 60 * 1000,
             secure: true, 
         });
         const ipAddress = req.ip || req.connection.remoteAddress;
