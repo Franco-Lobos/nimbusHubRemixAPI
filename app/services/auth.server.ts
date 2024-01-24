@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 const { sign, verify } = jwt;
 
 export const externalUserManager = async(
-  userId: string, email: string, name: string, accessToken:string,refreshToken:string 
+  userId: string, email: string, name: string, accessToken:string,refreshToken:string , signedOAuth2Token:string
   )=>{
     const salt = generateRandomString();
     let user: any = await getExternalUserByEmail(email).select('+authentication.salt +authentication.provideToken');
@@ -17,14 +17,14 @@ export const externalUserManager = async(
               accessToken,
               refreshToken,
               salt,
-              sessionToken: accessToken,
+              sessionToken: signedOAuth2Token, //temporal
           }
       });
       user=  await getExternalUserByEmail(email).select('+authentication.salt +authentication.provideToken');
   }else{
       user.authentication.accessToken = accessToken;
       user.authentication.refreshToken = refreshToken;
-      user.authentication.sessionToken = accessToken;
+      user.authentication.sessionToken = signedOAuth2Token;//temporal
   }
 
   //LOG IN

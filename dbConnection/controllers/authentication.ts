@@ -6,7 +6,7 @@ import {OAuth2Client} from 'google-auth-library';
 
 import jwt from 'jsonwebtoken';
 import { externalUserManager } from '~/services/auth.server';
-import { ExternalUser, createExternalUser } from 'dbConnection/models/externalUsers';
+import { ExternalUser, createExternalUser, getExternalUserByEmail, getExternalUserBySessionToken } from 'dbConnection/models/externalUsers';
 
 const { sign } = jwt;
 export const login = async(req: express.Request, res: express.Response)=>{
@@ -82,16 +82,17 @@ export const register  = async(req: express.Request, res: express.Response)=>{
     }
 }
 
-export async function googleLogin(
+export async function googleAuthenticate(
     request: express.Request, response: express.Response
   ) {
     if (request.method === 'POST') {
       try {
   
-            const { accesToken, refreshToken, tokenId } = request.body;
+            const { accesToken, refreshToken, tokenId , signedOAuth2Token} = request.body;
             let email :string |undefined= undefined;
             let userId :string |undefined= undefined;
             let userName :string |undefined= undefined;
+        
             //VERIFY GOOGLE VALIDATION TOKEN
             const client = new OAuth2Client();
             async function verify() {
@@ -115,14 +116,13 @@ export async function googleLogin(
             if (!isAccesTokenValid) {
                 return response.status(500).json({ status: 'error', message: 'Failed to verify Google Acces token' });
             }    
+            const isSignedOAuth2TokenValid = verifySessionToken(signedOAuth2Token);
+            if (!isSignedOAuth2TokenValid) {
+                return response.status(500).json({ status: 'error', message: 'Failed to verify Google Acces token' });
+            }    
 
-            const loggedUser = await externalUserManager(userId, email!, userName!, accesToken, refreshToken );
-            
-            response.cookie(process.env.NIMBUS_AUTH!, loggedUser.authentication.sessionToken, {
-                httpOnly: true,
-                maxAge: 60 * 60 * 1000, // twelveHoursInMilliseconds  12 * 60 * 60 * 1000,
-                secure: true, 
-            });
+            const loggedUser = await externalUserManager(userId, email!, userName!, accesToken, refreshToken,  signedOAuth2Token);
+
             const ipAddress = request.ip || request.connection.remoteAddress;
             return response.status(200).json({user:loggedUser, ipAddress: ipAddress}).end();
 
@@ -132,3 +132,46 @@ export async function googleLogin(
       }
     }
   };
+
+
+export async function googleLogin(
+    req: express.Request, res: express.Response
+  ) {
+    try {
+        const {signedOAuth2Token} = req.body;
+    
+        if(!signedOAuth2Token ){
+            return res.status(400).json({status: 400, error: 'Token is null' });
+        }
+
+        // Check if it has expired
+        const isTokenValid = verifySessionToken(signedOAuth2Token);
+        if (!isTokenValid) {
+            return res.status(403).json(ErrorManager(403));
+        }
+
+        //check if user exist
+        const externalUser = await getExternalUserBySessionToken(signedOAuth2Token).select('+authentication.salt');
+        if(!externalUser){
+            return res.status(403).json(ErrorManager(403));
+        }
+
+        //LOG IN
+        const salt = generateRandomString();
+        const tokenPayload = authentication(salt, externalUser._id.toString());
+        externalUser.authentication.sessionToken = sign(tokenPayload, process.env.API_DECODER!, { algorithm: 'HS256' });
+        await externalUser.save(); 
+
+        res.cookie(process.env.NIMBUS_AUTH!, externalUser.authentication.sessionToken, {
+            httpOnly: true,
+            maxAge: 60 * 60 * 1000, // twelveHoursInMilliseconds  12 * 60 * 60 * 1000,
+            secure: true, 
+        });
+        const ipAddress = req.ip || req.socket.remoteAddress;
+        return res.status(200).json({user: externalUser, ipAddress: ipAddress}).end();
+
+    } catch(error){
+        console.log(error);
+        return res.status(500).json(ErrorManager(500));
+    }
+}
