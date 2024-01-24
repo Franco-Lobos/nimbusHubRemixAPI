@@ -8,8 +8,6 @@
     "start": "remix-serve build/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "typecheck": "tsc",
-    "build": "run-p build:*",
-    "build:remix": "remix build",
     "serve": "npx tsx --inspect server.ts",
     "dev": "remix dev -c \"npx tsx server.ts\""
   },
@@ -50,7 +48,7 @@
     "@types/node": "^20.10.8",
     "@types/react": "^18.2.47",
     "@types/react-dom": "^18.2.18",
-    "nodemon": "^3.0.2",
+    "nodemon": "^3.0.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },
