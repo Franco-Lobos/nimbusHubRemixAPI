@@ -25,10 +25,7 @@ export const login = async(req: express.Request, res: express.Response)=>{
         }
 
         const salt = generateRandomString();
-
-        // user.authentication.sessionToken = authentication(salt, user._id.toString());
         const tokenPayload = authentication(salt, user._id.toString());
-
         user.authentication.sessionToken = sign(tokenPayload, process.env.API_DECODER!, { algorithm: 'HS256' });
 
         await user.save(); 
