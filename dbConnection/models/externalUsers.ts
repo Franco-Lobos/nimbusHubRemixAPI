@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export interface ExternalUser {
-    username: string;
+    name: string;
     email: string;
     authentication:{
         accessToken: string;
@@ -12,7 +12,7 @@ export interface ExternalUser {
 }
 
 export const ExternalUserSchema = new mongoose.Schema({
-    username: {type: String, required: true},
+    name: {type: String, required: true},
     email: {type: String, required: true, unique:true},
     authentication:{
         accessToken: {type: String, required: true, select: false},

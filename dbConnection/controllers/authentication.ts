@@ -1,9 +1,9 @@
 import express from 'express';
 import { getUserByEmail , createUser} from '../models/users';
 import { generateRandomString, authentication } from '../helpers';
+import { ErrorManager } from '~/utils/ErrorManager';
 
 import jwt from 'jsonwebtoken';
-import { ErrorManager } from '~/utils/ErrorManager';
 const { sign, verify } = jwt;
 export const login = async(req: express.Request, res: express.Response)=>{
     try{
