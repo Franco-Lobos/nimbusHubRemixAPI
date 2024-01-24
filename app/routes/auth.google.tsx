@@ -1,4 +1,5 @@
 import { ActionFunctionArgs, json } from "@remix-run/node";
+import { authenticator } from "~/services/auth.server";
 
 export async function action({
   request,
@@ -6,14 +7,15 @@ export async function action({
 
   if (request.method === 'POST') {
     try {
-      const rawData = await request.text();
+    //   const rawData = await request.text();
 
-      if (!rawData.trim()) {
-        throw new Error('Request body is empty');
-      }
-      const data = JSON.parse(rawData);
-      console.log("data: ->>>", data);
+    //   if (!rawData.trim()) {
+    //     throw new Error('Request body is empty');
+    //   }
+    //   const data = JSON.parse(rawData);
+    //   console.log("data: ->>>", data);
 
+    // authenticator.authenticate('google', { scope: ['profile'] });
       
     //   const newUser = await createUser(data);
       return json({ status: 'success', data: "HI FROM GOOGLE AUTH" });     

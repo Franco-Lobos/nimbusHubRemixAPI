@@ -413,13 +413,30 @@ var loader3 = async ({ params }) => {
   }
 };
 
+// app/routes/auth.google.tsx
+var auth_google_exports = {};
+__export(auth_google_exports, {
+  action: () => action
+});
+import { json as json4 } from "@remix-run/node";
+async function action({
+  request
+}) {
+  if (request.method === "POST")
+    try {
+      return json4({ status: "success", data: "HI FROM GOOGLE AUTH" });
+    } catch (error) {
+      return console.error("Error creating user:", error), json4({ status: "error", message: "Failed to create user" }, { status: 500 });
+    }
+}
+
 // app/routes/user.tsx
 var user_exports = {};
 __export(user_exports, {
   default: () => UserApi,
   loader: () => loader4
 });
-import { json as json4 } from "@remix-run/react";
+import { json as json5 } from "@remix-run/react";
 
 // dbConnection/models/users.ts
 import mongoose from "mongoose";
@@ -436,7 +453,7 @@ var UserSchema = new mongoose.Schema({
 // app/routes/user.tsx
 var loader4 = async ({ request }) => {
   let users = await getUsers();
-  return json4(users, { headers: { "Cache-Control": "no-store" } });
+  return json5(users, { headers: { "Cache-Control": "no-store" } });
 };
 function UserApi() {
   return (
@@ -446,7 +463,7 @@ function UserApi() {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { entry: { module: "/build/entry.client-A3MVWUQZ.js", imports: ["/build/_shared/chunk-ZWGWGGVF.js", "/build/_shared/chunk-XU7DNSPJ.js", "/build/_shared/chunk-LXPGIDPK.js", "/build/_shared/chunk-DM4554CJ.js", "/build/_shared/chunk-GIAAE3CH.js", "/build/_shared/chunk-BOXFZXVX.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-4P2OIDZI.js", imports: void 0, hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !0 }, "routes/user": { id: "routes/user", parentId: "root", path: "user", index: void 0, caseSensitive: void 0, module: "/build/routes/user-R27QRQ4A.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.forecast.$cityLoc": { id: "routes/weather.forecast.$cityLoc", parentId: "root", path: "weather/forecast/:cityLoc", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.forecast.$cityLoc-HYB6VM6W.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.history.$cityLoc": { id: "routes/weather.history.$cityLoc", parentId: "root", path: "weather/history/:cityLoc", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.history.$cityLoc-QBPA4YYW.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.realtime.$cityLoc": { id: "routes/weather.realtime.$cityLoc", parentId: "root", path: "weather/realtime/:cityLoc", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.realtime.$cityLoc-S6I2E5G2.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "b0378128", hmr: { runtime: "/build/_shared/chunk-DM4554CJ.js", timestamp: 1705978906461 }, url: "/build/manifest-B0378128.js" };
+var assets_manifest_default = { entry: { module: "/build/entry.client-YOD5LHXT.js", imports: ["/build/_shared/chunk-ZWGWGGVF.js", "/build/_shared/chunk-XU7DNSPJ.js", "/build/_shared/chunk-LSNQPJDP.js", "/build/_shared/chunk-DM4554CJ.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-GIAAE3CH.js", "/build/_shared/chunk-BOXFZXVX.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-IGSPRLF6.js", imports: void 0, hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !0 }, "routes/auth.google": { id: "routes/auth.google", parentId: "root", path: "auth/google", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.google-VGCC6HJ5.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/user": { id: "routes/user", parentId: "root", path: "user", index: void 0, caseSensitive: void 0, module: "/build/routes/user-P6HEPSCS.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.forecast.$cityLoc": { id: "routes/weather.forecast.$cityLoc", parentId: "root", path: "weather/forecast/:cityLoc", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.forecast.$cityLoc-HYB6VM6W.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.history.$cityLoc": { id: "routes/weather.history.$cityLoc", parentId: "root", path: "weather/history/:cityLoc", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.history.$cityLoc-QBPA4YYW.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.realtime.$cityLoc": { id: "routes/weather.realtime.$cityLoc", parentId: "root", path: "weather/realtime/:cityLoc", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.realtime.$cityLoc-S6I2E5G2.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "b48f2536", hmr: { runtime: "/build/_shared/chunk-DM4554CJ.js", timestamp: 1706058806757 }, url: "/build/manifest-B48F2536.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var mode = "development", assetsBuildDirectory = "public/build", future = { v3_fetcherPersist: !1, v3_relativeSplatPath: !1 }, publicPath = "/build/", entry = { module: entry_server_exports }, routes = {
@@ -481,6 +498,14 @@ var mode = "development", assetsBuildDirectory = "public/build", future = { v3_f
     index: void 0,
     caseSensitive: void 0,
     module: weather_history_cityLoc_exports
+  },
+  "routes/auth.google": {
+    id: "routes/auth.google",
+    parentId: "root",
+    path: "auth/google",
+    index: void 0,
+    caseSensitive: void 0,
+    module: auth_google_exports
   },
   "routes/user": {
     id: "routes/user",
