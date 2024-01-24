@@ -1,10 +1,14 @@
-import express from 'express';
+import express, { json } from 'express';
 import { getUserByEmail , createUser} from '../models/users';
-import { generateRandomString, authentication } from '../helpers';
+import { generateRandomString, authentication, verifySessionToken } from '../helpers';
+import { ErrorManager } from '~/utils/ErrorManager';
+import {OAuth2Client} from 'google-auth-library';
 
 import jwt from 'jsonwebtoken';
-import { ErrorManager } from '~/utils/ErrorManager';
-const { sign, verify } = jwt;
+import { externalUserManager } from '~/services/auth.server';
+import { ExternalUser, createExternalUser } from 'dbConnection/models/externalUsers';
+
+const { sign } = jwt;
 export const login = async(req: express.Request, res: express.Response)=>{
     try{
         const {email, password} = req.body;
@@ -25,10 +29,7 @@ export const login = async(req: express.Request, res: express.Response)=>{
         }
 
         const salt = generateRandomString();
-
-        // user.authentication.sessionToken = authentication(salt, user._id.toString());
         const tokenPayload = authentication(salt, user._id.toString());
-
         user.authentication.sessionToken = sign(tokenPayload, process.env.API_DECODER!, { algorithm: 'HS256' });
 
         await user.save(); 
@@ -80,3 +81,54 @@ export const register  = async(req: express.Request, res: express.Response)=>{
         return res.status(500).json(ErrorManager(500));
     }
 }
+
+export async function googleLogin(
+    request: express.Request, response: express.Response
+  ) {
+    if (request.method === 'POST') {
+      try {
+  
+            const { accesToken, refreshToken, tokenId } = request.body;
+            let email :string |undefined= undefined;
+            let userId :string |undefined= undefined;
+            let userName :string |undefined= undefined;
+            //VERIFY GOOGLE VALIDATION TOKEN
+            const client = new OAuth2Client();
+            async function verify() {
+                const ticket = await client.verifyIdToken({
+                    idToken: tokenId,
+                    audience: process.env.GOOGLE_CLIENT_ID,  // Specify the CLIENT_ID of the app that accesses the backend
+                });
+                const payload = ticket.getPayload();
+                email = payload?.email;
+                userName= payload?.name;
+                userId = payload?.sub;
+            }
+    
+            await verify().catch(console.error);
+
+            if(!userId){
+                return response.status(500).json({ status: 'error', message: 'Failed to verify Google token ID' });
+            }
+  
+            const isAccesTokenValid = verifySessionToken(accesToken);
+            if (!isAccesTokenValid) {
+                return response.status(500).json({ status: 'error', message: 'Failed to verify Google Acces token' });
+            }    
+
+            const loggedUser = await externalUserManager(userId, email!, userName!, accesToken, refreshToken );
+            
+            response.cookie(process.env.NIMBUS_AUTH!, loggedUser.authentication.sessionToken, {
+                httpOnly: true,
+                maxAge: 60 * 60 * 1000, // twelveHoursInMilliseconds  12 * 60 * 60 * 1000,
+                secure: true, 
+            });
+            const ipAddress = request.ip || request.connection.remoteAddress;
+            return response.status(200).json({user:loggedUser, ipAddress: ipAddress}).end();
+
+      } catch (error) {
+        console.error('Error creating user:', error);
+        return response.status(500).json({ status: 'error', message: 'Failed to create user' });
+      }
+    }
+  };

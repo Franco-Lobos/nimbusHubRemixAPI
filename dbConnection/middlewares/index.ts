@@ -4,6 +4,7 @@ import pkg from 'lodash';
 import { getUserBySessionToken } from '../models/users';
 import {verifySessionToken} from '../helpers/index';
 import { ErrorManager } from '~/utils/ErrorManager';
+import { getExternalUserBySessionToken } from 'dbConnection/models/externalUsers';
 
 const { get, merge } = pkg;
 export const isOwner = async (req:express.Request, res:express.Response, next: express.NextFunction) => {
@@ -44,8 +45,9 @@ export const isAuthenticated = async (req:express.Request, res:express.Response,
             return res.status(403).json(ErrorManager(403));
         }
 
-        const extingUser = await getUserBySessionToken (sessionToken);
-        if(!extingUser){
+        const extingUser = await getUserBySessionToken(sessionToken);
+        const extingExternalUser = await getExternalUserBySessionToken(sessionToken);
+        if(!extingUser && !extingExternalUser){
             return res.status(403).json(ErrorManager(403));
         }
 
