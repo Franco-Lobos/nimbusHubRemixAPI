@@ -16,7 +16,7 @@ export const ExternalUserSchema = new mongoose.Schema({
     email: {type: String, required: true, unique:true},
     authentication:{
         accessToken: {type: String, required: true, select: false},
-        refreshToken: {type: String, required: true, select: false},
+        refreshToken: {type: String, select: false},
         salt: {type: String, select: false},
         sessionToken: {type: String, select: false},
     }

@@ -413,91 +413,8 @@ var loader3 = async ({ params }) => {
   }
 };
 
-// app/routes/auth.google.tsx
-var auth_google_exports = {};
-__export(auth_google_exports, {
-  action: () => action
-});
-import { json as json4 } from "@remix-run/node";
-
-// dbConnection/helpers/index.ts
-import crypto from "crypto";
-import jwt from "jsonwebtoken";
-var { sign, verify } = jwt, generateRandomString = (length = 128) => crypto.randomBytes(length).toString("base64"), authentication = (salt, password) => crypto.createHmac("sha256", [salt, password].join("/")).update(process.env.API_DECODER).digest("hex");
-function verifySessionToken(sessionToken) {
-  try {
-    let decodedPayload = verify(sessionToken, process.env.API_DECODER, { algorithms: ["HS256"] });
-    return !decodedPayload.exp || decodedPayload.exp > Math.floor(Date.now() / 1e3);
-  } catch (error) {
-    return console.error("Token verification error:", error.message), !1;
-  }
-}
-
-// app/routes/auth.google.tsx
-import { OAuth2Client } from "google-auth-library";
-
-// dbConnection/models/externalUsers.ts
-import mongoose from "mongoose";
-var ExternalUserSchema = new mongoose.Schema({
-  name: { type: String, required: !0 },
-  email: { type: String, required: !0, unique: !0 },
-  authentication: {
-    accessToken: { type: String, required: !0, select: !1 },
-    refreshToken: { type: String, required: !0, select: !1 },
-    salt: { type: String, select: !1 },
-    sessionToken: { type: String, select: !1 }
-  }
-}), ExternalUserModule = mongoose.models.ExternalUser || mongoose.model("ExternalUser", ExternalUserSchema);
-var getExternalUserbyId = (id) => ExternalUserModule.findById(id), createExternalUser = (values) => new ExternalUserModule(values).save().then((user) => user.toObject());
-
-// app/services/auth.server.ts
-import jwt2 from "jsonwebtoken";
-var { sign: sign2, verify: verify2 } = jwt2, externalUserManager = async (userId, email, name, accessToken, refreshToken) => {
-  let user = await getExternalUserbyId(userId).select("+authentication.salt +authentication.provideToken");
-  if (user)
-    user.authentication.accessToken = accessToken, user.authentication.refreshToken = refreshToken;
-  else {
-    let salt2 = generateRandomString();
-    user = await createExternalUser({
-      email,
-      name,
-      authentication: {
-        accessToken,
-        refreshToken,
-        salt: salt2
-      }
-    });
-  }
-  let salt = generateRandomString(), tokenPayload = authentication(salt, user._id.toString());
-  return user.authentication.sessionToken = sign2(tokenPayload, process.env.API_DECODER, { algorithm: "HS256" }), await user.save(), user;
-};
-
-// app/routes/auth.google.tsx
-async function action({
-  request
-}) {
-  if (request.method === "POST")
-    try {
-      let { user, tokenId } = await request.json();
-      if (!verifySessionToken(tokenId))
-        return json4({ status: "error", message: "Failed to verify token" }, { status: 500 });
-      let client = new OAuth2Client();
-      async function verify3() {
-        return (await client.verifyIdToken({
-          idToken: tokenId,
-          audience: process.env.GOOGLE_CLIENT_ID
-          // Specify the CLIENT_ID of the app that accesses the backend
-        })).getPayload().sub;
-      }
-      let userId = await verify3().catch(console.error);
-      if (!userId)
-        return json4({ status: "error", message: "Failed to verify google token" }, { status: 500 });
-      let parsedUser = user, loggedUser = externalUserManager(userId, parsedUser.email, parsedUser.name, parsedUser.authentication.accessToken, parsedUser.authentication.refreshToken);
-      return json4({ status: "success", data: "HI FROM GOOGLE AUTH" });
-    } catch (error) {
-      return console.error("Error creating user:", error), json4({ status: "error", message: "Failed to create user" }, { status: 500 });
-    }
-}
+// app/routes/delete.auth.google.tsx
+var delete_auth_google_exports = {};
 
 // app/routes/user.tsx
 var user_exports = {};
@@ -505,11 +422,11 @@ __export(user_exports, {
   default: () => UserApi,
   loader: () => loader4
 });
-import { json as json5 } from "@remix-run/react";
+import { json as json4 } from "@remix-run/react";
 
 // dbConnection/models/users.ts
-import mongoose2 from "mongoose";
-var UserSchema = new mongoose2.Schema({
+import mongoose from "mongoose";
+var UserSchema = new mongoose.Schema({
   username: { type: String, required: !0 },
   email: { type: String, required: !0, unique: !0 },
   authentication: {
@@ -517,12 +434,12 @@ var UserSchema = new mongoose2.Schema({
     salt: { type: String, select: !1 },
     sessionToken: { type: String, select: !1 }
   }
-}), UserModule = mongoose2.models.User || mongoose2.model("User", UserSchema), getUsers = () => UserModule.find();
+}), UserModule = mongoose.models.User || mongoose.model("User", UserSchema), getUsers = () => UserModule.find();
 
 // app/routes/user.tsx
 var loader4 = async ({ request }) => {
   let users = await getUsers();
-  return json5(users, { headers: { "Cache-Control": "no-store" } });
+  return json4(users, { headers: { "Cache-Control": "no-store" } });
 };
 function UserApi() {
   return (
@@ -532,7 +449,7 @@ function UserApi() {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { entry: { module: "/build/entry.client-MYKGV6DR.js", imports: ["/build/_shared/chunk-ZWGWGGVF.js", "/build/_shared/chunk-XU7DNSPJ.js", "/build/_shared/chunk-KAESSHAP.js", "/build/_shared/chunk-DM4554CJ.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-GIAAE3CH.js", "/build/_shared/chunk-BOXFZXVX.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-KPB2442H.js", imports: void 0, hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !0 }, "routes/auth.google": { id: "routes/auth.google", parentId: "root", path: "auth/google", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.google-VGCC6HJ5.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/user": { id: "routes/user", parentId: "root", path: "user", index: void 0, caseSensitive: void 0, module: "/build/routes/user-4Z7RRXZH.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.forecast.$cityLoc": { id: "routes/weather.forecast.$cityLoc", parentId: "root", path: "weather/forecast/:cityLoc", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.forecast.$cityLoc-HYB6VM6W.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.history.$cityLoc": { id: "routes/weather.history.$cityLoc", parentId: "root", path: "weather/history/:cityLoc", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.history.$cityLoc-QBPA4YYW.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.realtime.$cityLoc": { id: "routes/weather.realtime.$cityLoc", parentId: "root", path: "weather/realtime/:cityLoc", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.realtime.$cityLoc-S6I2E5G2.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "26f0a302", hmr: { runtime: "/build/_shared/chunk-DM4554CJ.js", timestamp: 1706073662736 }, url: "/build/manifest-26F0A302.js" };
+var assets_manifest_default = { entry: { module: "/build/entry.client-MYKGV6DR.js", imports: ["/build/_shared/chunk-ZWGWGGVF.js", "/build/_shared/chunk-XU7DNSPJ.js", "/build/_shared/chunk-KAESSHAP.js", "/build/_shared/chunk-DM4554CJ.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-GIAAE3CH.js", "/build/_shared/chunk-BOXFZXVX.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-KPB2442H.js", imports: void 0, hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !0 }, "routes/delete.auth.google": { id: "routes/delete.auth.google", parentId: "root", path: "delete/auth/google", index: void 0, caseSensitive: void 0, module: "/build/routes/delete.auth.google-4F5OOIXZ.js", imports: void 0, hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/user": { id: "routes/user", parentId: "root", path: "user", index: void 0, caseSensitive: void 0, module: "/build/routes/user-4Z7RRXZH.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.forecast.$cityLoc": { id: "routes/weather.forecast.$cityLoc", parentId: "root", path: "weather/forecast/:cityLoc", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.forecast.$cityLoc-HYB6VM6W.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.history.$cityLoc": { id: "routes/weather.history.$cityLoc", parentId: "root", path: "weather/history/:cityLoc", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.history.$cityLoc-QBPA4YYW.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.realtime.$cityLoc": { id: "routes/weather.realtime.$cityLoc", parentId: "root", path: "weather/realtime/:cityLoc", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.realtime.$cityLoc-S6I2E5G2.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "d5c5c338", hmr: { runtime: "/build/_shared/chunk-DM4554CJ.js", timestamp: 1706102315381 }, url: "/build/manifest-D5C5C338.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var mode = "development", assetsBuildDirectory = "public/build", future = { v3_fetcherPersist: !1, v3_relativeSplatPath: !1 }, publicPath = "/build/", entry = { module: entry_server_exports }, routes = {
@@ -568,13 +485,13 @@ var mode = "development", assetsBuildDirectory = "public/build", future = { v3_f
     caseSensitive: void 0,
     module: weather_history_cityLoc_exports
   },
-  "routes/auth.google": {
-    id: "routes/auth.google",
+  "routes/delete.auth.google": {
+    id: "routes/delete.auth.google",
     parentId: "root",
-    path: "auth/google",
+    path: "delete/auth/google",
     index: void 0,
     caseSensitive: void 0,
-    module: auth_google_exports
+    module: delete_auth_google_exports
   },
   "routes/user": {
     id: "routes/user",
