@@ -117,8 +117,13 @@ export async function googleLogin(
             }    
 
             const loggedUser = await externalUserManager(userId, email!, userName!, accesToken, refreshToken );
+            
+            response.cookie(process.env.NIMBUS_AUTH!, loggedUser.authentication.sessionToken, {
+                httpOnly: true,
+                maxAge: 60 * 60 * 1000, // twelveHoursInMilliseconds  12 * 60 * 60 * 1000,
+                secure: true, 
+            });
             const ipAddress = request.ip || request.connection.remoteAddress;
-            console.log("LOGGED USER:", loggedUser)
             return response.status(200).json({user:loggedUser, ipAddress: ipAddress}).end();
 
       } catch (error) {

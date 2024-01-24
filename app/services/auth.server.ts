@@ -17,17 +17,19 @@ export const externalUserManager = async(
               accessToken,
               refreshToken,
               salt,
+              sessionToken: accessToken,
           }
       });
       user=  await getExternalUserByEmail(email).select('+authentication.salt +authentication.provideToken');
   }else{
       user.authentication.accessToken = accessToken;
       user.authentication.refreshToken = refreshToken;
+      user.authentication.sessionToken = accessToken;
   }
 
   //LOG IN
-  const tokenPayload: string= authentication(salt, user._id.toString());
-  user.authentication.sessionToken = sign(tokenPayload, process.env.API_DECODER!, { algorithm: 'HS256' });
+  // const tokenPayload: string= authentication(salt, user._id.toString());
+  // user.authentication.sessionToken = sign(tokenPayload, process.env.API_DECODER!, { algorithm: 'HS256' });
   await user.save(); 
   //LOG IN END
   return user;
