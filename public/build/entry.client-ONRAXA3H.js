@@ -6,7 +6,7 @@ import {
 } from "/build/_shared/chunk-XU7DNSPJ.js";
 import {
   RemixBrowser
-} from "/build/_shared/chunk-KAESSHAP.js";
+} from "/build/_shared/chunk-Q4JWT2ZK.js";
 import {
   createHotContext
 } from "/build/_shared/chunk-DM4554CJ.js";
@@ -44,4 +44,4 @@ if (import.meta) {
     }, this)
   );
 });
-//# sourceMappingURL=/build/entry.client-MYKGV6DR.js.map
+//# sourceMappingURL=/build/entry.client-ONRAXA3H.js.map

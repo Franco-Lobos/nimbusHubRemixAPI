@@ -202,11 +202,6 @@ __export(weather_forecast_cityLoc_exports, {
 });
 import { json } from "@remix-run/react";
 
-// app/library/stringManagement.tsx
-function convertToURLfriendly(string) {
-  return string.replace(/ /g, "-").toLowerCase();
-}
-
 // app/services/tomorrowAPI.tsx
 var getWeatherForecast = async (location) => {
   console.log("LOCATION-FORE:", location);
@@ -220,7 +215,7 @@ var getWeatherForecast = async (location) => {
     }
   })).json();
 }, getRealTimeWeather = async (location) => {
-  location = convertToURLfriendly(location);
+  console.log("REALTIME:", location);
   let tomorrowUrl = `${process.env.BASE_URL}/realtime?location=${location}`;
   return await (await fetch(tomorrowUrl, {
     method: "GET",
@@ -231,7 +226,7 @@ var getWeatherForecast = async (location) => {
     }
   })).json();
 }, getWeatherRecentHistory = async (location) => {
-  location = convertToURLfriendly(location);
+  console.log("HISTORY:", location);
   let tomorrowUrl = `${process.env.BASE_URL}/history/recent?location=${location}`;
   return await (await fetch(tomorrowUrl, {
     method: "GET",
@@ -449,7 +444,7 @@ function UserApi() {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { entry: { module: "/build/entry.client-MYKGV6DR.js", imports: ["/build/_shared/chunk-ZWGWGGVF.js", "/build/_shared/chunk-XU7DNSPJ.js", "/build/_shared/chunk-KAESSHAP.js", "/build/_shared/chunk-DM4554CJ.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-GIAAE3CH.js", "/build/_shared/chunk-BOXFZXVX.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-KPB2442H.js", imports: void 0, hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !0 }, "routes/delete.auth.google": { id: "routes/delete.auth.google", parentId: "root", path: "delete/auth/google", index: void 0, caseSensitive: void 0, module: "/build/routes/delete.auth.google-4F5OOIXZ.js", imports: void 0, hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/user": { id: "routes/user", parentId: "root", path: "user", index: void 0, caseSensitive: void 0, module: "/build/routes/user-4Z7RRXZH.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.forecast.$cityLoc": { id: "routes/weather.forecast.$cityLoc", parentId: "root", path: "weather/forecast/:cityLoc", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.forecast.$cityLoc-HYB6VM6W.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.history.$cityLoc": { id: "routes/weather.history.$cityLoc", parentId: "root", path: "weather/history/:cityLoc", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.history.$cityLoc-QBPA4YYW.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.realtime.$cityLoc": { id: "routes/weather.realtime.$cityLoc", parentId: "root", path: "weather/realtime/:cityLoc", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.realtime.$cityLoc-S6I2E5G2.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "d5c5c338", hmr: { runtime: "/build/_shared/chunk-DM4554CJ.js", timestamp: 1706139335823 }, url: "/build/manifest-D5C5C338.js" };
+var assets_manifest_default = { entry: { module: "/build/entry.client-ONRAXA3H.js", imports: ["/build/_shared/chunk-ZWGWGGVF.js", "/build/_shared/chunk-XU7DNSPJ.js", "/build/_shared/chunk-Q4JWT2ZK.js", "/build/_shared/chunk-DM4554CJ.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-GIAAE3CH.js", "/build/_shared/chunk-BOXFZXVX.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-X542ARZQ.js", imports: void 0, hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !0 }, "routes/delete.auth.google": { id: "routes/delete.auth.google", parentId: "root", path: "delete/auth/google", index: void 0, caseSensitive: void 0, module: "/build/routes/delete.auth.google-4F5OOIXZ.js", imports: void 0, hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/user": { id: "routes/user", parentId: "root", path: "user", index: void 0, caseSensitive: void 0, module: "/build/routes/user-F7SUHCGA.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.forecast.$cityLoc": { id: "routes/weather.forecast.$cityLoc", parentId: "root", path: "weather/forecast/:cityLoc", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.forecast.$cityLoc-HYB6VM6W.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.history.$cityLoc": { id: "routes/weather.history.$cityLoc", parentId: "root", path: "weather/history/:cityLoc", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.history.$cityLoc-QBPA4YYW.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/weather.realtime.$cityLoc": { id: "routes/weather.realtime.$cityLoc", parentId: "root", path: "weather/realtime/:cityLoc", index: void 0, caseSensitive: void 0, module: "/build/routes/weather.realtime.$cityLoc-S6I2E5G2.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "99273d47", hmr: { runtime: "/build/_shared/chunk-DM4554CJ.js", timestamp: 1706170779094 }, url: "/build/manifest-99273D47.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var mode = "development", assetsBuildDirectory = "public/build", future = { v3_fetcherPersist: !1, v3_relativeSplatPath: !1 }, publicPath = "/build/", entry = { module: entry_server_exports }, routes = {

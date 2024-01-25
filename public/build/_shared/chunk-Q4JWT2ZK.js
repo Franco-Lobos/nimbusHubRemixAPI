@@ -7086,7 +7086,7 @@ var LiveReload = (
   // Dead Code Elimination magic for production builds.
   // This way devs don't have to worry about doing the NODE_ENV check themselves.
   false ? () => null : function LiveReload2({
-    origin = "http://localhost:3001/",
+    origin = "http://localhost:3002/",
     port,
     timeoutMs = 1e3,
     nonce = void 0
@@ -8488,4 +8488,4 @@ react-router-dom/dist/index.js:
    * @license MIT
    *)
 */
-//# sourceMappingURL=/build/_shared/chunk-KAESSHAP.js.map
+//# sourceMappingURL=/build/_shared/chunk-Q4JWT2ZK.js.map

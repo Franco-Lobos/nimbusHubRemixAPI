@@ -19,7 +19,8 @@ export const getWeatherForecast = async (location: string) => {
 
 
 export const getRealTimeWeather = async (location: string) => {
-    location = convertToURLfriendly(location);
+    // location = convertToURLfriendly(location);
+    console.log("REALTIME:", location)
     const tomorrowUrl = `${process.env.BASE_URL}/realtime?location=${location}`; // TODO SAVE IN CONSTANTS
 
     const data = await fetch(tomorrowUrl, {
@@ -33,7 +34,9 @@ export const getRealTimeWeather = async (location: string) => {
 }
 
 export const getWeatherRecentHistory = async (location: string) => {
-    location = convertToURLfriendly(location);
+    // location = convertToURLfriendly(location);
+    console.log("HISTORY:", location)
+
     const tomorrowUrl = `${process.env.BASE_URL}/history/recent?location=${location}`; // TODO SAVE IN CONSTANTS
 
     const data = await fetch(tomorrowUrl, {

@@ -6,7 +6,7 @@ import {
   Outlet,
   isRouteErrorResponse,
   useRouteError
-} from "/build/_shared/chunk-KAESSHAP.js";
+} from "/build/_shared/chunk-Q4JWT2ZK.js";
 import {
   createHotContext
 } from "/build/_shared/chunk-DM4554CJ.js";
@@ -131,4 +131,4 @@ export {
   ErrorBoundary,
   Root as default
 };
-//# sourceMappingURL=/build/root-KPB2442H.js.map
+//# sourceMappingURL=/build/root-X542ARZQ.js.map
